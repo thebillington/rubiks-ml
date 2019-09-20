@@ -25,6 +25,10 @@ var BACK_FACE = [10,11];
 
 var instructions = [];
 
+var turns = [setXSideRotation, setYSideRotation, setZSideRotation]
+var directions = [-1,1];
+var sides = [0,2];
+
 var speed = 1;
 
 function setup() {
@@ -34,7 +38,7 @@ function setup() {
 
     renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild( renderer.domElement );
+    document.body.appendChild( renderer.domElement ); 
 
     camera.position.x = 5;
     camera.position.y = 5;
@@ -43,6 +47,15 @@ function setup() {
 
     initRubiksCube(0, 0, 0);
     animate();
+}
+
+function scramble() {
+    for (var i = 0; i < 100; i++) {
+        var inst = getRandomInteger(0,3);
+        var dir = getRandomInteger(0,2);
+        var side = getRandomInteger(0,2);
+        addInstruction(turns[inst], directions[dir], sides[side]);
+    }
 }
 
 function setSpeed(_speed) {
@@ -303,4 +316,8 @@ function rotateAboutPoint(obj, point, axis, theta, pointIsWorld){
     }
 
     obj.rotateOnAxis(axis, theta); // rotate the OBJECT
+}
+
+function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min) ) + min;
 }
