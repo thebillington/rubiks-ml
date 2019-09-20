@@ -14,12 +14,12 @@
     
         <div style="border: 2px solid black; padding: 20px; border-radius: 20px; position: fixed; left: 0; top: 0; background: #999999; margin: 20px;">
 
-            <p><button onclick="setXSideRotation(1, 2)">&lt; Right</button> <button onclick="setXSideRotation(-1, 2)">Right &gt;</button></p>
-            <p><button onclick="setZSideRotation(1, 2)">&lt; Front</button> <button onclick="setZSideRotation(-1, 2)">Front &gt;</button></p>
-            <p><button onclick="setYSideRotation(1, 2)">&lt; Top</button> <button onclick="setYSideRotation(-1, 2)">Top &gt;</button></p>
-            <p><button onclick="setXSideRotation(1, 0)">&lt; Left</button> <button onclick="setXSideRotation(-1, 0)">Left &gt;</button></p>
-            <p><button onclick="setZSideRotation(1, 0)">&lt; Back</button> <button onclick="setZSideRotation(-1, 0)">Back &gt;</button></p>
-            <p><button onclick="setYSideRotation(1, 0)">&lt; Bottom</button> <button onclick="setYSideRotation(-1, 0)">Bottom &gt;</button></p>
+            <p><button onclick="addInstruction(setXSideRotation, 1, 2)">&lt; Right</button> <button onclick="addInstruction(setXSideRotation, -1, 2)">Right &gt;</button></p>
+            <p><button onclick="addInstruction(setZSideRotation, 1, 2)">&lt; Front</button> <button onclick="addInstruction(setZSideRotation, -1, 2)">Front &gt;</button></p>
+            <p><button onclick="addInstruction(setYSideRotation, 1, 2)">&lt; Top</button> <button onclick="addInstruction(setYSideRotation, -1, 2)">Top &gt;</button></p>
+            <p><button onclick="addInstruction(setXSideRotation, 1, 0)">&lt; Left</button> <button onclick="addInstruction(setXSideRotation, -1, 0)">Left &gt;</button></p>
+            <p><button onclick="addInstruction(setZSideRotation, 1, 0)">&lt; Back</button> <button onclick="addInstruction(setZSideRotation, -1, 0)">Back &gt;</button></p>
+            <p><button onclick="addInstruction(setYSideRotation, 1, 0)">&lt; Bottom</button> <button onclick="addInstruction(setYSideRotation, -1, 0)">Bottom &gt;</button></p>
 
         </div>
 

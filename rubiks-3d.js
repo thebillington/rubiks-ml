@@ -23,6 +23,8 @@ var LEFT_FACE = [2,3];
 var BOTTOM_FACE = [6,7];
 var BACK_FACE = [10,11];
 
+var instructions = [];
+
 function setup() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xdddddd);
@@ -41,10 +43,19 @@ function setup() {
     animate();
 }
 
+function addInstruction(instruction, direction, face) {
+    instructions.push([instruction, direction, face]);
+}
+
 function animate() {
     requestAnimationFrame( animate );
     if (rotating) {
         rotateSide();
+    } else {
+        if (instructions.length > 0) {
+            var f = instructions.shift();
+            f[0](f[1], f[2]);
+        }
     }
 	renderer.render( scene, camera );
 }
@@ -53,7 +64,7 @@ function initRubiksCube(x, y, z) {
     for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++) {
             for (var k = 0; k < 3; k++) {
-                var thisCube = getBoxGeometery(i,j,k);
+                var thisCube = getBoxGeometery();
                 setCubePosition(thisCube, BASE_LOC + (i * CUBE_SIZE), BASE_LOC + (j * CUBE_SIZE), BASE_LOC + (k * CUBE_SIZE));
                 cubes.push(thisCube);
             }
@@ -229,9 +240,9 @@ function rotateCubeAboutPoint(obj, theta, pointIsWorld) {
     rotateAboutPoint(obj.line, rotationPoint, rotationAxes, THREE.Math.degToRad(theta), pointIsWorld);
 }
 
-function getBoxGeometery(x, y, z) {
+function getBoxGeometery() {
     var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    setFaceColours(geometry, x, y, z);
+    setFaceColours(geometry);
     var material = new THREE.MeshBasicMaterial( { color: 0xffffff, vertexColors: THREE.FaceColors } );
     var cube = new THREE.Mesh( geometry, material );
     var edges = new THREE.EdgesGeometry( geometry );
@@ -241,7 +252,7 @@ function getBoxGeometery(x, y, z) {
     return {cube: cube, line: line}
 }
 
-function setFaceColours(geometry, x, y, z) {
+function setFaceColours(geometry) {
     for (var i = 0; i < 2; i++) {
         geometry.faces[RIGHT_FACE[i]].color.setHex( 0xffa500 );
         geometry.faces[TOP_FACE[i]].color.setHex( 0x008000 );
@@ -251,41 +262,6 @@ function setFaceColours(geometry, x, y, z) {
         geometry.faces[BACK_FACE[i]].color.setHex( 0xffff00 );
     }
 }
-
-// function setFaceColours(geometry, x, y, z) {
-//     for (var i = 0; i < 2; i++) {
-//         if (x == 2) {
-//             geometry.faces[RIGHT_FACE[i]].color.setHex( 0xffa500 );
-//         } else {
-//             geometry.faces[RIGHT_FACE[i]].color.setHex( 0x000000 );
-//         }
-//         if (y == 2) {
-//             geometry.faces[TOP_FACE[i]].color.setHex( 0x008000 );
-//         } else {
-//             geometry.faces[TOP_FACE[i]].color.setHex( 0x000000 );
-//         }
-//         if (z == 2) {
-//             geometry.faces[FRONT_FACE[i]].color.setHex( 0xffffff );
-//         } else {
-//             geometry.faces[FRONT_FACE[i]].color.setHex( 0x000000 );
-//         }
-//         if (x == 0) {
-//             geometry.faces[LEFT_FACE[i]].color.setHex( 0xff0000 );
-//         } else {
-//             geometry.faces[LEFT_FACE[i]].color.setHex( 0x000000 );
-//         }
-//         if (y == 0) {
-//             geometry.faces[BOTTOM_FACE[i]].color.setHex( 0x0000ff );
-//         } else {
-//             geometry.faces[BOTTOM_FACE[i]].color.setHex( 0x000000 );
-//         }
-//         if (z == 0) {
-//             geometry.faces[BACK_FACE[i]].color.setHex( 0xffff00 );
-//         } else {
-//             geometry.faces[BACK_FACE[i]].color.setHex( 0x000000 );
-//         }
-//     }
-// }
 
 function rotateAboutPoint(obj, point, axis, theta, pointIsWorld){
     pointIsWorld = (pointIsWorld === undefined)? false : pointIsWorld;
