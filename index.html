@@ -10,6 +10,19 @@
         <title>Machine Learning Rubik's Cube</title>
     </head>
     
-	<body onload="setup()"></body>
+    <body onload="setup()">
+    
+        <div style="border: 2px solid black; padding: 20px; border-radius: 20px; position: fixed; left: 0; top: 0; background: #999999; margin: 20px;">
+
+            <p><button onclick="setRightSideRotation(1)">&lt; Right</button> <button onclick="setRightSideRotation(-1)">Right &gt;</button></p>
+            <p><button>&lt; Front</button> <button>Front &gt;</button></p>
+            <p><button>&lt; Top</button> <button>Top &gt;</button></p>
+            <p><button>&lt; Left</button> <button>Left &gt;</button></p>
+            <p><button>&lt; Back</button> <button>Back &gt;</button></p>
+            <p><button>&lt; Bottom</button> <button>Bottom &gt;</button></p>
+
+        </div>
+
+    </body>
     
 </html>

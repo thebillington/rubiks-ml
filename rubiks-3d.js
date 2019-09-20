@@ -3,7 +3,18 @@ var camera;
 var renderer;
 
 var CUBE_SIZE = 1;
+var TOTAL_CUBE_SIZE = CUBE_SIZE * 3;
+var BASE_LOC = 0;
+
 var cubes = [];
+
+var rotating = false;
+var direction = 1;
+
+var rotationAmount;
+var rotationSide;
+var rotationPoint;
+var rotationAxes;
 
 function setup() {
     scene = new THREE.Scene();
@@ -13,23 +24,24 @@ function setup() {
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
 
-    camera.position.z = 5;
+    camera.position.x = 5;
     camera.position.y = 5;
+    camera.position.z = 5;
     camera.lookAt(new THREE.Vector3(0,0,0));
 
     initRubiksCube(0, 0, 0);
-    
     animate();
 }
 
 function animate() {
     requestAnimationFrame( animate );
+    if (rotating) {
+        rotateSide();
+    }
 	renderer.render( scene, camera );
 }
 
 function initRubiksCube(x, y, z) {
-    var TOTAL_CUBE_SIZE = CUBE_SIZE * 3;
-    var BASE_LOC = -(TOTAL_CUBE_SIZE/2)+(CUBE_SIZE/2);
     for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++) {
             for (var k = 0; k < 3; k++) {
@@ -38,6 +50,34 @@ function initRubiksCube(x, y, z) {
                 cubes.push(thisCube);
             }
         }
+    }
+}
+
+function setRightSideRotation(_direction) {
+    if (rotating) {
+        return;
+    }
+    rotationSide = [];
+    rotationAmount = 0;
+    rotationPoint = new THREE.Vector3(2, 1, 1);
+    rotationAxes = new THREE.Vector3(1, 0, 0);
+    rotating = true;
+    direction = _direction;
+    for (var i = 0; i < cubes.length; i++) {
+        if (cubes[i].cube.position.x == 2) {
+            rotationSide.push(cubes[i]);
+        }
+    }
+}
+
+function rotateSide() {
+    rotationAmount++;
+    if (rotationAmount == 90) {
+        rotating = false;
+        return;
+    }
+    for (var i = 0; i < rotationSide.length; i++) {
+        rotateCubeAboutPoint(rotationSide[i], direction);
     }
 }
 
@@ -77,6 +117,11 @@ function setCubeRotation(cube, x, y, z) {
     cube.line.rotation.z = z;
 }
 
+function rotateCubeAboutPoint(obj, theta, pointIsWorld) {
+    rotateAboutPoint(obj.cube, rotationPoint, rotationAxes, THREE.Math.degToRad(theta), pointIsWorld);
+    rotateAboutPoint(obj.line, rotationPoint, rotationAxes, THREE.Math.degToRad(theta), pointIsWorld);
+}
+
 function getBoxGeometery() {
     var geometry = new THREE.BoxGeometry( 1, 1, 1 );
     var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
@@ -86,4 +131,22 @@ function getBoxGeometery() {
     scene.add(cube);
     scene.add(line);
     return {cube: cube, line: line}
+}
+
+function rotateAboutPoint(obj, point, axis, theta, pointIsWorld){
+    pointIsWorld = (pointIsWorld === undefined)? false : pointIsWorld;
+
+    if(pointIsWorld){
+        obj.parent.localToWorld(obj.position); // compensate for world coordinate
+    }
+
+    obj.position.sub(point); // remove the offset
+    obj.position.applyAxisAngle(axis, theta); // rotate the POSITION
+    obj.position.add(point); // re-add the offset
+
+    if(pointIsWorld){
+        obj.parent.worldToLocal(obj.position); // undo world coordinates compensation
+    }
+
+    obj.rotateOnAxis(axis, theta); // rotate the OBJECT
 }
