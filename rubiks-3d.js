@@ -53,7 +53,7 @@ function initRubiksCube(x, y, z) {
     }
 }
 
-function setRightSideRotation(_direction) {
+function setXSideRotation(_direction, side) {
     if (rotating) {
         return;
     }
@@ -64,20 +64,61 @@ function setRightSideRotation(_direction) {
     rotating = true;
     direction = _direction;
     for (var i = 0; i < cubes.length; i++) {
-        if (cubes[i].cube.position.x == 2) {
+        if (Math.round(cubes[i].cube.position.x) == side) {
+            rotationSide.push(cubes[i]);
+        }
+    }
+}
+
+function setYSideRotation(_direction, side) {
+    if (rotating) {
+        return;
+    }
+    rotationSide = [];
+    rotationAmount = 0;
+    rotationPoint = new THREE.Vector3(1, 2, 1);
+    rotationAxes = new THREE.Vector3(0, 1, 0);
+    rotating = true;
+    direction = _direction;
+    for (var i = 0; i < cubes.length; i++) {
+        if (Math.round(cubes[i].cube.position.y) == side) {
+            rotationSide.push(cubes[i]);
+        }
+    }
+}
+
+function setZSideRotation(_direction, side) {
+    if (rotating) {
+        return;
+    }
+    rotationSide = [];
+    rotationAmount = 0;
+    rotationPoint = new THREE.Vector3(1, 1, 2);
+    rotationAxes = new THREE.Vector3(0, 0, 1);
+    rotating = true;
+    direction = _direction;
+    for (var i = 0; i < cubes.length; i++) {
+        if (Math.round(cubes[i].cube.position.z) == side) {
             rotationSide.push(cubes[i]);
         }
     }
 }
 
 function rotateSide() {
+    for (var i = 0; i < rotationSide.length; i++) {
+        rotateCubeAboutPoint(rotationSide[i], direction);
+    }
     rotationAmount++;
     if (rotationAmount == 90) {
         rotating = false;
-        return;
+        resetRotation();
     }
+}
+
+function resetRotation() {
     for (var i = 0; i < rotationSide.length; i++) {
-        rotateCubeAboutPoint(rotationSide[i], direction);
+        rotationSide[i].cube.rotation.set(0,0,0);
+        rotationSide[i].line.rotation.set(0,0,0);
     }
 }
 
