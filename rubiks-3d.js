@@ -16,6 +16,13 @@ var rotationSide;
 var rotationPoint;
 var rotationAxes;
 
+var RIGHT_FACE = [0,1];
+var TOP_FACE = [4,5];
+var FRONT_FACE = [8,9];
+var LEFT_FACE = [2,3];
+var BOTTOM_FACE = [6,7];
+var BACK_FACE = [10,11];
+
 function setup() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xdddddd);
@@ -112,14 +119,72 @@ function rotateSide() {
     rotationAmount++;
     if (rotationAmount == 90) {
         rotating = false;
-        //resetRotation();
+        resetRotation();
     }
 }
 
 function resetRotation() {
     for (var i = 0; i < rotationSide.length; i++) {
+        if (rotationAxes.x) {
+            if (direction == 1) {
+                var tempColour = rotationSide[i].cube.geometry.faces[BACK_FACE[0]].color;
+                for (var j = 0; j < 2; j++) {
+                    rotationSide[i].cube.geometry.faces[BACK_FACE[j]].color = rotationSide[i].cube.geometry.faces[BOTTOM_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[BOTTOM_FACE[j]].color = rotationSide[i].cube.geometry.faces[FRONT_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[FRONT_FACE[j]].color = rotationSide[i].cube.geometry.faces[TOP_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[TOP_FACE[j]].color = tempColour;
+                }
+            } else {
+                var tempColour = rotationSide[i].cube.geometry.faces[TOP_FACE[0]].color;
+                for (var j = 0; j < 2; j++) {
+                    rotationSide[i].cube.geometry.faces[TOP_FACE[j]].color = rotationSide[i].cube.geometry.faces[FRONT_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[FRONT_FACE[j]].color = rotationSide[i].cube.geometry.faces[BOTTOM_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[BOTTOM_FACE[j]].color = rotationSide[i].cube.geometry.faces[BACK_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[BACK_FACE[j]].color = tempColour;
+                }
+            }
+        }
+        if (rotationAxes.y) {
+            if (direction == 1) {
+                var tempColour = rotationSide[i].cube.geometry.faces[FRONT_FACE[0]].color;
+                for (var j = 0; j < 2; j++) {
+                    rotationSide[i].cube.geometry.faces[FRONT_FACE[j]].color = rotationSide[i].cube.geometry.faces[LEFT_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[LEFT_FACE[j]].color = rotationSide[i].cube.geometry.faces[BACK_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[BACK_FACE[j]].color = rotationSide[i].cube.geometry.faces[RIGHT_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[RIGHT_FACE[j]].color = tempColour;
+                }
+            } else {
+                var tempColour = rotationSide[i].cube.geometry.faces[RIGHT_FACE[0]].color;
+                for (var j = 0; j < 2; j++) {
+                    rotationSide[i].cube.geometry.faces[RIGHT_FACE[j]].color = rotationSide[i].cube.geometry.faces[BACK_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[BACK_FACE[j]].color = rotationSide[i].cube.geometry.faces[LEFT_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[LEFT_FACE[j]].color = rotationSide[i].cube.geometry.faces[FRONT_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[FRONT_FACE[j]].color = tempColour;
+                }
+            }
+        }
+        if (rotationAxes.z) {
+            if (direction == 1) {
+                var tempColour = rotationSide[i].cube.geometry.faces[RIGHT_FACE[0]].color;
+                for (var j = 0; j < 2; j++) {
+                    rotationSide[i].cube.geometry.faces[RIGHT_FACE[j]].color = rotationSide[i].cube.geometry.faces[BOTTOM_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[BOTTOM_FACE[j]].color = rotationSide[i].cube.geometry.faces[LEFT_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[LEFT_FACE[j]].color = rotationSide[i].cube.geometry.faces[TOP_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[TOP_FACE[j]].color = tempColour;
+                }
+            } else {
+                var tempColour = rotationSide[i].cube.geometry.faces[TOP_FACE[0]].color;
+                for (var j = 0; j < 2; j++) {
+                    rotationSide[i].cube.geometry.faces[TOP_FACE[j]].color = rotationSide[i].cube.geometry.faces[LEFT_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[LEFT_FACE[j]].color = rotationSide[i].cube.geometry.faces[BOTTOM_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[BOTTOM_FACE[j]].color = rotationSide[i].cube.geometry.faces[RIGHT_FACE[j]].color;
+                    rotationSide[i].cube.geometry.faces[RIGHT_FACE[j]].color = tempColour;
+                }
+            }
+        }
         rotationSide[i].cube.rotation.set(0,0,0);
         rotationSide[i].line.rotation.set(0,0,0);
+        rotationSide[i].cube.geometry.elementsNeedUpdate = true;
     }
 }
 
@@ -164,13 +229,6 @@ function rotateCubeAboutPoint(obj, theta, pointIsWorld) {
     rotateAboutPoint(obj.line, rotationPoint, rotationAxes, THREE.Math.degToRad(theta), pointIsWorld);
 }
 
-var RIGHT_FACE = [0,1];
-var TOP_FACE = [4,5];
-var FRONT_FACE = [8,9];
-var LEFT_FACE = [2,3];
-var BOTTOM_FACE = [6,7];
-var BACK_FACE = [10,11];
-
 function getBoxGeometery(x, y, z) {
     var geometry = new THREE.BoxGeometry( 1, 1, 1 );
     setFaceColours(geometry, x, y, z);
@@ -185,38 +243,49 @@ function getBoxGeometery(x, y, z) {
 
 function setFaceColours(geometry, x, y, z) {
     for (var i = 0; i < 2; i++) {
-        if (x == 2) {
-            geometry.faces[RIGHT_FACE[i]].color.setHex( 0xffa500 );
-        } else {
-            geometry.faces[RIGHT_FACE[i]].color.setHex( 0x000000 );
-        }
-        if (y == 2) {
-            geometry.faces[TOP_FACE[i]].color.setHex( 0x008000 );
-        } else {
-            geometry.faces[TOP_FACE[i]].color.setHex( 0x000000 );
-        }
-        if (z == 2) {
-            geometry.faces[FRONT_FACE[i]].color.setHex( 0xffffff );
-        } else {
-            geometry.faces[FRONT_FACE[i]].color.setHex( 0x000000 );
-        }
-        if (x == 0) {
-            geometry.faces[LEFT_FACE[i]].color.setHex( 0xff0000 );
-        } else {
-            geometry.faces[LEFT_FACE[i]].color.setHex( 0x000000 );
-        }
-        if (y == 0) {
-            geometry.faces[BOTTOM_FACE[i]].color.setHex( 0x0000ff );
-        } else {
-            geometry.faces[BOTTOM_FACE[i]].color.setHex( 0x000000 );
-        }
-        if (z == 0) {
-            geometry.faces[BACK_FACE[i]].color.setHex( 0xffff00 );
-        } else {
-            geometry.faces[BACK_FACE[i]].color.setHex( 0x000000 );
-        }
+        geometry.faces[RIGHT_FACE[i]].color.setHex( 0xffa500 );
+        geometry.faces[TOP_FACE[i]].color.setHex( 0x008000 );
+        geometry.faces[FRONT_FACE[i]].color.setHex( 0xffffff );
+        geometry.faces[LEFT_FACE[i]].color.setHex( 0xff0000 );
+        geometry.faces[BOTTOM_FACE[i]].color.setHex( 0x0000ff );
+        geometry.faces[BACK_FACE[i]].color.setHex( 0xffff00 );
     }
 }
+
+// function setFaceColours(geometry, x, y, z) {
+//     for (var i = 0; i < 2; i++) {
+//         if (x == 2) {
+//             geometry.faces[RIGHT_FACE[i]].color.setHex( 0xffa500 );
+//         } else {
+//             geometry.faces[RIGHT_FACE[i]].color.setHex( 0x000000 );
+//         }
+//         if (y == 2) {
+//             geometry.faces[TOP_FACE[i]].color.setHex( 0x008000 );
+//         } else {
+//             geometry.faces[TOP_FACE[i]].color.setHex( 0x000000 );
+//         }
+//         if (z == 2) {
+//             geometry.faces[FRONT_FACE[i]].color.setHex( 0xffffff );
+//         } else {
+//             geometry.faces[FRONT_FACE[i]].color.setHex( 0x000000 );
+//         }
+//         if (x == 0) {
+//             geometry.faces[LEFT_FACE[i]].color.setHex( 0xff0000 );
+//         } else {
+//             geometry.faces[LEFT_FACE[i]].color.setHex( 0x000000 );
+//         }
+//         if (y == 0) {
+//             geometry.faces[BOTTOM_FACE[i]].color.setHex( 0x0000ff );
+//         } else {
+//             geometry.faces[BOTTOM_FACE[i]].color.setHex( 0x000000 );
+//         }
+//         if (z == 0) {
+//             geometry.faces[BACK_FACE[i]].color.setHex( 0xffff00 );
+//         } else {
+//             geometry.faces[BACK_FACE[i]].color.setHex( 0x000000 );
+//         }
+//     }
+// }
 
 function rotateAboutPoint(obj, point, axis, theta, pointIsWorld){
     pointIsWorld = (pointIsWorld === undefined)? false : pointIsWorld;
