@@ -12,7 +12,7 @@
     
     <body onload="setup()">
     
-        <div style="border: 2px solid black; padding: 20px; border-radius: 20px; position: fixed; left: 0; top: 0; background: #999999; margin: 20px;">
+        <div style="border: 2px solid black; padding: 20px; border-radius: 20px; position: fixed; left: 0; top: 0; background: #999999; margin: 20px; text-align: center;">
 
             <p><button onclick="addInstruction(setXSideRotation, 1, 2)">&lt; Right</button> <button onclick="addInstruction(setXSideRotation, -1, 2)">Right &gt;</button></p>
             <p><button onclick="addInstruction(setZSideRotation, 1, 2)">&lt; Front</button> <button onclick="addInstruction(setZSideRotation, -1, 2)">Front &gt;</button></p>
@@ -20,6 +20,17 @@
             <p><button onclick="addInstruction(setXSideRotation, 1, 0)">&lt; Left</button> <button onclick="addInstruction(setXSideRotation, -1, 0)">Left &gt;</button></p>
             <p><button onclick="addInstruction(setZSideRotation, 1, 0)">&lt; Back</button> <button onclick="addInstruction(setZSideRotation, -1, 0)">Back &gt;</button></p>
             <p><button onclick="addInstruction(setYSideRotation, 1, 0)">&lt; Bottom</button> <button onclick="addInstruction(setYSideRotation, -1, 0)">Bottom &gt;</button></p>
+
+        </div>
+    
+        <div style="border: 2px solid black; padding: 20px; border-radius: 20px; position: fixed; right: 0; top: 0; background: #999999; margin: 20px; text-align: center;">
+
+            <p><button onclick="forwardRoll()">Forward Roll</button></p>
+            <p><button onclick="reverseRoll()">Reverse Roll</button></p>
+            <p><button onclick="setSpeed(1)">Slow</button></p>
+            <p><button onclick="setSpeed(2)">Medium</button></p>
+            <p><button onclick="setSpeed(3)">Fast</button></p>
+            <p><button onclick="setSpeed(9)">Rapid</button></p>
 
         </div>
 

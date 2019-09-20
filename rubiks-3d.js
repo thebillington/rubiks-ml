@@ -25,6 +25,8 @@ var BACK_FACE = [10,11];
 
 var instructions = [];
 
+var speed = 1;
+
 function setup() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xdddddd);
@@ -43,8 +45,30 @@ function setup() {
     animate();
 }
 
+function setSpeed(_speed) {
+    if (!rotating) speed = _speed;
+}
+
 function addInstruction(instruction, direction, face) {
     instructions.push([instruction, direction, face]);
+}
+
+function forwardRoll() {
+    for (var i = 0; i < 6; i++) {
+        addInstruction(setXSideRotation, 1, 2);
+        addInstruction(setYSideRotation, -1, 0);
+        addInstruction(setXSideRotation, -1, 2);
+        addInstruction(setYSideRotation, 1, 0);
+    }
+}
+
+function reverseRoll() {
+    for (var i = 0; i < 6; i++) {
+        addInstruction(setYSideRotation, 1, 0);
+        addInstruction(setXSideRotation, -1, 2);
+        addInstruction(setYSideRotation, -1, 0);
+        addInstruction(setXSideRotation, 1, 2);
+    }
 }
 
 function animate() {
@@ -125,9 +149,9 @@ function setZSideRotation(_direction, side) {
 
 function rotateSide() {
     for (var i = 0; i < rotationSide.length; i++) {
-        rotateCubeAboutPoint(rotationSide[i], direction);
+        rotateCubeAboutPoint(rotationSide[i], direction * speed);
     }
-    rotationAmount++;
+    rotationAmount += speed;
     if (rotationAmount == 90) {
         rotating = false;
         resetRotation();
